@@ -23,7 +23,7 @@ export function Navbar() {
       <nav className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 md:px-6">
         <Link
           href="/"
-          className="text-xl font-bold tracking-tight text-amber-400 outline-none focus:outline-none focus-visible:outline-none"
+          className="text-xl font-bold tracking-tight text-amber-400 focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#1a1a2e] focus-visible:outline-none"
         >
           TasteBite
         </Link>
@@ -33,7 +33,7 @@ export function Navbar() {
             <li key={href}>
               <Link
                 href={href}
-                className="text-sm font-medium text-white/90 transition-colors hover:text-amber-400 outline-none focus:outline-none focus-visible:outline-none"
+                className="text-sm font-medium text-white/90 transition-colors hover:text-amber-400 focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#1a1a2e] focus-visible:outline-none"
               >
                 {label}
               </Link>
@@ -44,7 +44,7 @@ export function Navbar() {
         <div className="flex items-center gap-3">
           <Link
             href="/cart"
-            className="relative inline-flex items-center justify-center rounded-md p-2 text-amber-400 transition-colors hover:bg-white/10 outline-none focus:outline-none focus-visible:outline-none"
+            className="relative inline-flex items-center justify-center rounded-md p-2 text-amber-400 transition-colors hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#1a1a2e] focus-visible:outline-none"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -76,7 +76,7 @@ export function Navbar() {
               <button
                 type="button"
                 onClick={() => logout()}
-                className="rounded-md border border-amber-500/50 px-3 py-1.5 text-sm font-medium text-amber-400 transition-colors hover:bg-amber-500/10 outline-none focus:outline-none focus-visible:outline-none"
+                className="rounded-md border border-amber-500/50 px-3 py-1.5 text-sm font-medium text-amber-400 transition-colors hover:bg-amber-500/10 focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#1a1a2e] focus-visible:outline-none"
               >
                 Logout
               </button>
@@ -84,7 +84,7 @@ export function Navbar() {
           ) : (
             <Link
               href="/login"
-              className="hidden rounded-md bg-amber-500 px-3 py-1.5 text-sm font-semibold text-[#1a1a2e] transition-colors hover:bg-amber-400 sm:inline-flex outline-none focus:outline-none focus-visible:outline-none"
+              className="hidden rounded-md bg-amber-500 px-3 py-1.5 text-sm font-semibold text-[#1a1a2e] transition-colors hover:bg-amber-400 sm:inline-flex focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#1a1a2e] focus-visible:outline-none"
             >
               Login
             </Link>
@@ -92,7 +92,7 @@ export function Navbar() {
 
           <button
             type="button"
-            className="inline-flex items-center justify-center rounded-md p-2 text-white md:hidden outline-none focus:outline-none focus-visible:outline-none"
+            className="inline-flex items-center justify-center rounded-md p-2 text-white md:hidden focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#1a1a2e] focus-visible:outline-none"
             onClick={() => setMobileOpen(true)}
             aria-expanded={mobileOpen}
             aria-controls="mobile-nav"
@@ -120,7 +120,7 @@ export function Navbar() {
         <>
           <button
             type="button"
-            className="fixed inset-0 z-10 bg-black/60 md:hidden outline-none focus:outline-none focus-visible:outline-none"
+            className="fixed inset-0 z-10 bg-black/60 md:hidden focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#1a1a2e] focus-visible:outline-none"
             aria-label="Close menu"
             onClick={() => setMobileOpen(false)}
           />
@@ -133,7 +133,7 @@ export function Navbar() {
               <button
                 type="button"
                 onClick={() => setMobileOpen(false)}
-                className="rounded-md p-2 text-white/80 outline-none focus:outline-none focus-visible:outline-none"
+                className="rounded-md p-2 text-white/80 focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#1a1a2e] focus-visible:outline-none"
                 aria-label="Close menu"
               >
                 <svg
@@ -157,7 +157,7 @@ export function Navbar() {
                 <li key={href}>
                   <Link
                     href={href}
-                    className="block text-base font-medium text-white/90 outline-none focus:outline-none focus-visible:outline-none"
+                    className="block text-base font-medium text-white/90 focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#1a1a2e] focus-visible:outline-none"
                     onClick={() => setMobileOpen(false)}
                   >
                     {label}
@@ -175,7 +175,7 @@ export function Navbar() {
                       logout();
                       setMobileOpen(false);
                     }}
-                    className="w-full rounded-md border border-amber-500/50 py-2 text-sm font-medium text-amber-400 outline-none focus:outline-none focus-visible:outline-none"
+                    className="w-full rounded-md border border-amber-500/50 py-2 text-sm font-medium text-amber-400 focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#1a1a2e] focus-visible:outline-none"
                   >
                     Logout
                   </button>
@@ -183,7 +183,7 @@ export function Navbar() {
               ) : (
                 <Link
                   href="/login"
-                  className="block w-full rounded-md bg-amber-500 py-2 text-center text-sm font-semibold text-[#1a1a2e] outline-none focus:outline-none focus-visible:outline-none"
+                  className="block w-full rounded-md bg-amber-500 py-2 text-center text-sm font-semibold text-[#1a1a2e] focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#1a1a2e] focus-visible:outline-none"
                   onClick={() => setMobileOpen(false)}
                 >
                   Login
