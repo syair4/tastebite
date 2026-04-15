@@ -212,7 +212,7 @@ export default function CheckoutPage() {
               </div>
               {promoApplied && (
                 <p className="text-sm text-green-400">
-                  Discount applied! You saved ${discountAmount.toFixed(2)}
+                  Invalid promo code. Please try a different code.
                 </p>
               )}
               {/* FIX: show "Invalid code" message for unknown promo codes */}
