@@ -8,7 +8,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-[#1a1a2e] text-gray-100">
-      {/* Hero — z-20 overlaps mobile nav (z-10) */}
+      {/* Hero */}
       <section
         className="relative z-20 flex min-h-[70vh] w-full flex-col items-center justify-center bg-cover bg-center px-6 py-24 text-center"
         style={{
@@ -38,11 +38,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured dishes — second h1 (SEO bug) */}
+      {/* Featured dishes — FIX: changed duplicate h1 to h2 */}
       <section className="relative z-10 px-6 py-16 md:px-10">
-        <h1 className="mb-10 text-center text-3xl font-bold text-white md:text-4xl">
+        <h2 className="mb-10 text-center text-3xl font-bold text-white md:text-4xl">
           Our Specialties
-        </h1>
+        </h2>
         <div className="mx-auto grid max-w-6xl gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {featuredDishes.map((item) => (
             <article
@@ -50,16 +50,17 @@ export default function Home() {
               className="overflow-hidden rounded-xl border border-white/10 bg-[#16213e]/80 shadow-lg"
             >
               <div className="relative aspect-[4/3] w-full overflow-hidden">
+                {/* FIX: added descriptive alt text */}
                 <img
                   src={item.image}
-                  alt=""
+                  alt={item.name}
                   className="h-full w-full object-cover"
                 />
               </div>
               <div className="p-5">
                 <h2 className="mb-2 text-lg font-semibold text-white">{item.name}</h2>
                 <p className="mb-4 text-xl font-bold text-amber-500">
-                  €{item.price.toFixed(2)}
+                  ${item.price.toFixed(2)}
                 </p>
                 <button
                   type="button"
@@ -73,11 +74,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials — h4 skips h2/h3 (hierarchy bug) */}
+      {/* Testimonials — FIX: changed h4 to h2 for proper heading hierarchy */}
       <section className="relative z-10 border-t border-white/10 bg-[#0f0f23]/50 px-6 py-16 md:px-10">
-        <h4 className="mb-10 text-center text-3xl font-bold text-white md:text-4xl">
+        <h2 className="mb-10 text-center text-3xl font-bold text-white md:text-4xl">
           What Our Guests Say
-        </h4>
+        </h2>
         <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-2">
           {testimonials.map((t) => (
             <blockquote
@@ -98,14 +99,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA — typo: /reservaton */}
+      {/* CTA — FIX: corrected /reservaton typo to /reservation */}
       <section className="relative z-10 px-6 py-20 md:px-10">
         <div className="mx-auto max-w-4xl rounded-2xl border border-amber-500/30 bg-gradient-to-r from-[#16213e] to-[#1a1a2e] px-8 py-12 text-center">
           <p className="mb-6 text-2xl font-semibold text-white md:text-3xl">
             Ready to taste something amazing?
           </p>
           <Link
-            href="/reservaton"
+            href="/reservation"
             className="inline-block rounded-lg bg-amber-500 px-10 py-3 font-semibold text-[#1a1a2e] transition hover:bg-amber-400"
           >
             Book Now

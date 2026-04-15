@@ -39,7 +39,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   const updateQuantity = (id: number, quantity: number) => {
-    // BUG: allows negative quantities — no validation
+    // FIX: prevent negative/zero quantities — remove item instead
+    if (quantity <= 0) {
+      removeFromCart(id);
+      return;
+    }
     setItems((prev) =>
       prev.map((i) => (i.id === id ? { ...i, quantity } : i))
     );
@@ -47,11 +51,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const clearCart = () => setItems([]);
 
-  // BUG: cartCount shows number of unique items, not total quantity
-  const cartCount = items.length;
+  // FIX: cartCount now sums all quantities, not just unique item count
+  const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
-  // BUG: cartTotal doesn't multiply price by quantity
-  const cartTotal = items.reduce((sum, item) => sum + item.price, 0);
+  // FIX: cartTotal now multiplies price by quantity
+  const cartTotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
     <CartContext.Provider

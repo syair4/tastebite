@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100">
@@ -15,7 +17,8 @@ export default function AboutPage() {
 
       <section className="px-6 py-16">
         <div className="mx-auto max-w-4xl">
-          <h4 className="mb-6 text-2xl font-semibold text-amber-500">Our Story</h4>
+          {/* FIX: changed h4 to h2 for proper heading hierarchy */}
+          <h2 className="mb-6 text-2xl font-semibold text-amber-500">Our Story</h2>
           <p className="leading-relaxed text-zinc-300">
             Founded in the heart of the city, we source ingredients from local farms and artisans.
             Every dish tells a story of craft, seasonality, and the people who grow and prepare our food.
@@ -29,30 +32,46 @@ export default function AboutPage() {
           <h2 className="mb-12 text-center text-3xl font-bold text-white">Meet the team</h2>
           <div className="grid gap-8 md:grid-cols-3">
             <div className="overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900">
-              <img
-                src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=400&h=300&fit=crop"
-                className="h-48 w-full object-cover"
-              />
+              {/* FIX: use Next.js Image component with descriptive alt text */}
+              <div className="relative h-48 w-full">
+                <Image
+                  src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=400&h=300&fit=crop"
+                  alt="Chef Maria Santos, Executive Chef"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
+              </div>
               <div className="p-5">
                 <p className="font-semibold text-white">Chef Maria Santos</p>
                 <p className="text-sm text-zinc-400">Executive Chef</p>
               </div>
             </div>
             <div className="overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900">
-              <img
-                src="https://images.unsplash.com/photo-1581299894003-aa3a0c0b21a9?w=400&h=300&fit=crop"
-                className="h-48 w-full object-cover"
-              />
+              <div className="relative h-48 w-full">
+                <Image
+                  src="https://images.unsplash.com/photo-1581299894003-aa3a0c0b21a9?w=400&h=300&fit=crop"
+                  alt="James Okonkwo, Sous Chef"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
+              </div>
               <div className="p-5">
                 <p className="font-semibold text-white">James Okonkwo</p>
                 <p className="text-sm text-zinc-400">Sous Chef</p>
               </div>
             </div>
             <div className="overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900">
-              <img
-                src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=400&h=300&fit=crop"
-                className="h-48 w-full object-cover"
-              />
+              <div className="relative h-48 w-full">
+                <Image
+                  src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=400&h=300&fit=crop"
+                  alt="Elena Vasquez, Pastry Chef"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                />
+              </div>
               <div className="p-5">
                 <p className="font-semibold text-white">Elena Vasquez</p>
                 <p className="text-sm text-zinc-400">Pastry Chef</p>
@@ -62,17 +81,18 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* FIX: changed low-contrast #666666 to high-contrast #e2e2e2 */}
       <section
         className="px-6 py-16"
-        style={{ backgroundColor: "#1a1a2e", color: "#666666" }}
+        style={{ backgroundColor: "#1a1a2e", color: "#e2e2e2" }}
       >
         <div className="mx-auto max-w-4xl text-center">
-          <h2 className="mb-10 text-3xl font-bold" style={{ color: "#666666" }}>
+          <h2 className="mb-10 text-3xl font-bold" style={{ color: "#e2e2e2" }}>
             Our values
           </h2>
           <div className="grid gap-8 md:grid-cols-3">
             <div>
-              <h3 className="mb-2 text-xl font-semibold" style={{ color: "#666666" }}>
+              <h3 className="mb-2 text-xl font-semibold" style={{ color: "#e2e2e2" }}>
                 Quality
               </h3>
               <p className="text-sm leading-relaxed">
@@ -80,7 +100,7 @@ export default function AboutPage() {
               </p>
             </div>
             <div>
-              <h3 className="mb-2 text-xl font-semibold" style={{ color: "#666666" }}>
+              <h3 className="mb-2 text-xl font-semibold" style={{ color: "#e2e2e2" }}>
                 Fresh
               </h3>
               <p className="text-sm leading-relaxed">
@@ -88,7 +108,7 @@ export default function AboutPage() {
               </p>
             </div>
             <div>
-              <h3 className="mb-2 text-xl font-semibold" style={{ color: "#666666" }}>
+              <h3 className="mb-2 text-xl font-semibold" style={{ color: "#e2e2e2" }}>
                 Community
               </h3>
               <p className="text-sm leading-relaxed">

@@ -8,6 +8,7 @@ export default function CartPage() {
   const { items: cart, cartTotal, updateQuantity, removeFromCart } = useCart();
 
   const subtotal = cartTotal;
+  // FIX: tax rate is 5% — fixed label to match calculation
   const tax = subtotal * 0.05;
   const total = subtotal + tax;
 
@@ -32,9 +33,10 @@ export default function CartPage() {
                   className="flex flex-wrap items-center gap-4 p-4 sm:flex-nowrap"
                 >
                   <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-zinc-800">
+                    {/* FIX: added descriptive alt text */}
                     <Image
                       src={item.image}
-                      alt=""
+                      alt={item.name}
                       fill
                       className="object-cover"
                       sizes="80px"
@@ -51,6 +53,7 @@ export default function CartPage() {
                       type="button"
                       onClick={() => updateQuantity(item.id, item.quantity - 1)}
                       className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-600 bg-zinc-800 text-lg text-zinc-200 hover:bg-zinc-700"
+                      aria-label={`Decrease quantity of ${item.name}`}
                     >
                       −
                     </button>
@@ -61,6 +64,7 @@ export default function CartPage() {
                       type="button"
                       onClick={() => updateQuantity(item.id, item.quantity + 1)}
                       className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-600 bg-zinc-800 text-lg text-zinc-200 hover:bg-zinc-700"
+                      aria-label={`Increase quantity of ${item.name}`}
                     >
                       +
                     </button>
@@ -69,6 +73,7 @@ export default function CartPage() {
                     type="button"
                     onClick={() => removeFromCart(item.id)}
                     className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-800 hover:text-amber-400"
+                    aria-label={`Remove ${item.name} from cart`}
                   >
                     ✕
                   </button>
@@ -81,13 +86,15 @@ export default function CartPage() {
                 <span>Subtotal</span>
                 <span>${subtotal.toFixed(2)}</span>
               </div>
+              {/* FIX: label now correctly says Tax (5%) to match the 0.05 calculation */}
               <div className="flex justify-between text-zinc-300">
-                <span>Tax (8%)</span>
+                <span>Tax (5%)</span>
                 <span>${tax.toFixed(2)}</span>
               </div>
+              {/* FIX: changed € to $ for consistent currency */}
               <div className="flex justify-between border-t border-zinc-800 pt-3 text-lg font-semibold text-amber-400">
                 <span>Total</span>
-                <span>€{total.toFixed(2)}</span>
+                <span>${total.toFixed(2)}</span>
               </div>
             </div>
 

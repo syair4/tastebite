@@ -5,7 +5,7 @@ const quickLinks = [
   { href: "/menu", label: "Menu" },
   { href: "/reservation", label: "Reservation" },
   { href: "/about", label: "About" },
-  { href: "/contcat", label: "Contact" },
+  { href: "/contact", label: "Contact" },
 ] as const;
 
 export function Footer() {
@@ -16,7 +16,7 @@ export function Footer() {
           <div>
             <h2 className="mb-3 text-lg font-semibold text-amber-400">About</h2>
             <p className="text-sm leading-relaxed text-white/70">
-              Lorem ipsum dolor sit amet
+              Experience culinary excellence at TasteBite — where bold flavors meet warm hospitality.
             </p>
           </div>
           <div>
@@ -74,8 +74,9 @@ export function Footer() {
             <a
               href="#"
               className="text-sm text-white/60 transition-colors hover:text-amber-400"
+              aria-label="Twitter"
             >
-              Twiter
+              Twitter
             </a>
             <a
               href="#"

@@ -9,26 +9,22 @@ export default function MenuPage() {
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
 
-  // Search state updates in the input, but results are not filtered by search (bug).
-  // const searchLower = search.trim().toLowerCase();
-  // const bySearch = menuItems.filter(
-  //   (item) =>
-  //     item.name.toLowerCase().includes(searchLower) ||
-  //     item.description.toLowerCase().includes(searchLower)
-  // );
-
   const filteredItems = useMemo(() => {
-    // Category "All" uses strict equality to "All" on item.category — matches nothing (bug).
-    return menuItems.filter((item) => item.category === selectedCategory);
-  }, [selectedCategory]);
+    // FIX: "All" now correctly returns all items
+    const byCategory =
+      selectedCategory === "All"
+        ? menuItems
+        : menuItems.filter((item) => item.category === selectedCategory);
 
-  function formatPrice(item: (typeof menuItems)[number]): string {
-    // Intentional inconsistent formatting: burger shows 3 decimal places (e.g. 17.490).
-    if (item.name.toLowerCase().includes("burger")) {
-      return item.price.toFixed(3);
-    }
-    return item.price.toFixed(2);
-  }
+    // FIX: search filtering is now active
+    const searchLower = search.trim().toLowerCase();
+    if (!searchLower) return byCategory;
+    return byCategory.filter(
+      (item) =>
+        item.name.toLowerCase().includes(searchLower) ||
+        item.description.toLowerCase().includes(searchLower)
+    );
+  }, [selectedCategory, search]);
 
   return (
     <div className="min-h-screen bg-[#0f0f23] px-4 py-10 text-white">
@@ -76,9 +72,10 @@ export default function MenuPage() {
             >
               <div className="relative aspect-[4/3] w-full overflow-hidden bg-black/30">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
+                {/* FIX: added descriptive alt text */}
                 <img
                   src={item.image}
-                  alt=""
+                  alt={item.name}
                   className="h-full w-full object-cover"
                 />
               </div>
@@ -109,15 +106,14 @@ export default function MenuPage() {
                   {item.description}
                 </p>
                 <div className="mt-auto flex items-center justify-between gap-3">
+                  {/* FIX: consistent 2-decimal price formatting for all items */}
                   <span className="text-lg font-bold text-amber-400">
-                    ${formatPrice(item)}
+                    ${item.price.toFixed(2)}
                   </span>
+                  {/* FIX: removed Lobster Bisque crash (id === 7 undefined crash) */}
                   <button
                     type="button"
-                    onClick={() =>
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                      item.id === 7 ? addToCart(undefined as any) : addToCart(item)
-                    }
+                    onClick={() => addToCart(item)}
                     className="rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-[#0f0f23] transition hover:bg-amber-400"
                   >
                     Add to Cart
