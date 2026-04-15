@@ -7,6 +7,9 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "TasteBite — Restaurant & Ordering",
+  // FIX: added meta description for SEO
+  description:
+    "TasteBite — experience culinary excellence. Browse our menu, make a reservation, and order your favourite dishes online.",
 };
 
 export default function RootLayout({
