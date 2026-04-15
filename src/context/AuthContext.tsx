@@ -20,10 +20,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
 
   const login = (email: string, password: string) => {
-    // BUG: logs password to console
-    console.log("Login attempt:", email, "password:", password);
-
-    // BUG: no real email validation — accepts anything
+    // FIX: removed console.log password exposure
+    // FIX: added email format validation
+    if (!email.includes('@')) return false;
     if (email && password) {
       setUser({ email, name: email.split("@")[0] || "User" });
       return true;
@@ -32,7 +31,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signup = (name: string, email: string, password: string) => {
-    console.log("Signup:", name, email, "password:", password);
+    // FIX: removed console.log password exposure
     if (name && email && password) {
       setUser({ email, name });
       return true;
