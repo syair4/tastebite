@@ -10,7 +10,7 @@ const navLinks = [
   { href: "/menu", label: "Menu" },
   { href: "/reservation", label: "Reservation" },
   { href: "/about", label: "About" },
-  { href: "/contcat", label: "Contact" },
+  { href: "/contact", label: "Contact" },
 ] as const;
 
 export function Navbar() {
