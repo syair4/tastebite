@@ -19,17 +19,52 @@ export default function CheckoutPage() {
   const [cvv, setCvv] = useState("");
   const [promoCode, setPromoCode] = useState("");
   const [promoApplied, setPromoApplied] = useState(false);
+  const [promoError, setPromoError] = useState("");
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
   const discountAmount = 0;
 
+  // Valid promo codes (can be extended)
+  const VALID_PROMO_CODES = ["TASTE10", "WELCOME20"];
+
   function handleApplyPromo() {
-    if (promoCode.trim()) {
+    setPromoError("");
+    if (!promoCode.trim()) return;
+    // FIX: validate promo code and show "Invalid code" for unknown codes
+    if (VALID_PROMO_CODES.includes(promoCode.trim().toUpperCase())) {
       setPromoApplied(true);
+    } else {
+      setPromoApplied(false);
+      setPromoError("Invalid code. Please check and try again.");
     }
+  }
+
+  function validateFields(): boolean {
+    const errors: Record<string, string> = {};
+
+    // FIX: card number validation — digits only, 13–19 chars
+    const cardDigits = cardNumber.replace(/\s/g, "");
+    if (!/^\d{13,19}$/.test(cardDigits)) {
+      errors.cardNumber = "Card number must be 13–19 digits.";
+    }
+
+    // FIX: CVV validation — 3 or 4 digits
+    if (!/^\d{3,4}$/.test(cvv)) {
+      errors.cvv = "CVV must be 3 or 4 digits.";
+    }
+
+    // FIX: expiry validation — MM/YY format
+    if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry)) {
+      errors.expiry = "Expiry must be in MM/YY format.";
+    }
+
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
   }
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!validateFields()) return;
     window.alert("Order placed! Thank you for choosing TasteBite.");
     clearCart();
     setFullName("");
@@ -42,6 +77,8 @@ export default function CheckoutPage() {
     setCvv("");
     setPromoCode("");
     setPromoApplied(false);
+    setPromoError("");
+    setValidationErrors({});
   }
 
   return (
@@ -61,13 +98,17 @@ export default function CheckoutPage() {
                 placeholder="Full Name"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
+                required
+                aria-label="Full Name"
                 className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-3 text-zinc-100 placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
               />
               <input
-                type="text"
+                type="email"
                 placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                required
+                aria-label="Email"
                 className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-3 text-zinc-100 placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
               />
               <input
@@ -75,6 +116,8 @@ export default function CheckoutPage() {
                 placeholder="Address"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
+                required
+                aria-label="Address"
                 className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-3 text-zinc-100 placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
               />
               <div className="grid gap-4 sm:grid-cols-2">
@@ -83,6 +126,8 @@ export default function CheckoutPage() {
                   placeholder="City"
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
+                  required
+                  aria-label="City"
                   className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-3 text-zinc-100 placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
                 />
                 <input
@@ -90,31 +135,62 @@ export default function CheckoutPage() {
                   placeholder="Zip Code"
                   value={zip}
                   onChange={(e) => setZip(e.target.value)}
+                  required
+                  aria-label="Zip Code"
                   className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-3 text-zinc-100 placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
                 />
               </div>
-              <input
-                type="text"
-                placeholder="Card Number"
-                value={cardNumber}
-                onChange={(e) => setCardNumber(e.target.value)}
-                className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-3 text-zinc-100 placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
-              />
+              <div>
+                <input
+                  type="text"
+                  placeholder="Card Number"
+                  value={cardNumber}
+                  onChange={(e) => setCardNumber(e.target.value)}
+                  aria-label="Card Number"
+                  inputMode="numeric"
+                  maxLength={19}
+                  className={`w-full rounded-lg border px-4 py-3 text-zinc-100 placeholder:text-zinc-500 bg-zinc-900 focus:outline-none focus:ring-1 focus:ring-amber-500 ${
+                    validationErrors.cardNumber ? "border-red-500" : "border-zinc-700 focus:border-amber-500"
+                  }`}
+                />
+                {validationErrors.cardNumber && (
+                  <p className="mt-1 text-sm text-red-400">{validationErrors.cardNumber}</p>
+                )}
+              </div>
               <div className="grid gap-4 sm:grid-cols-2">
-                <input
-                  type="text"
-                  placeholder="Expiry (MM/YY)"
-                  value={expiry}
-                  onChange={(e) => setExpiry(e.target.value)}
-                  className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-3 text-zinc-100 placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
-                />
-                <input
-                  type="text"
-                  placeholder="CVV"
-                  value={cvv}
-                  onChange={(e) => setCvv(e.target.value)}
-                  className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-3 text-zinc-100 placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
-                />
+                <div>
+                  <input
+                    type="text"
+                    placeholder="Expiry (MM/YY)"
+                    value={expiry}
+                    onChange={(e) => setExpiry(e.target.value)}
+                    aria-label="Card expiry date (MM/YY)"
+                    maxLength={5}
+                    className={`w-full rounded-lg border px-4 py-3 text-zinc-100 placeholder:text-zinc-500 bg-zinc-900 focus:outline-none focus:ring-1 focus:ring-amber-500 ${
+                      validationErrors.expiry ? "border-red-500" : "border-zinc-700 focus:border-amber-500"
+                    }`}
+                  />
+                  {validationErrors.expiry && (
+                    <p className="mt-1 text-sm text-red-400">{validationErrors.expiry}</p>
+                  )}
+                </div>
+                <div>
+                  <input
+                    type="text"
+                    placeholder="CVV"
+                    value={cvv}
+                    onChange={(e) => setCvv(e.target.value)}
+                    aria-label="CVV security code"
+                    inputMode="numeric"
+                    maxLength={4}
+                    className={`w-full rounded-lg border px-4 py-3 text-zinc-100 placeholder:text-zinc-500 bg-zinc-900 focus:outline-none focus:ring-1 focus:ring-amber-500 ${
+                      validationErrors.cvv ? "border-red-500" : "border-zinc-700 focus:border-amber-500"
+                    }`}
+                  />
+                  {validationErrors.cvv && (
+                    <p className="mt-1 text-sm text-red-400">{validationErrors.cvv}</p>
+                  )}
+                </div>
               </div>
 
               <div className="flex flex-wrap gap-2 pt-2">
@@ -122,7 +198,8 @@ export default function CheckoutPage() {
                   type="text"
                   placeholder="Promo code"
                   value={promoCode}
-                  onChange={(e) => setPromoCode(e.target.value)}
+                  onChange={(e) => { setPromoCode(e.target.value); setPromoError(""); }}
+                  aria-label="Promo code"
                   className="min-w-[200px] flex-1 rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-3 text-zinc-100 placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
                 />
                 <button
@@ -137,6 +214,10 @@ export default function CheckoutPage() {
                 <p className="text-sm text-green-400">
                   Discount applied! You saved ${discountAmount.toFixed(2)}
                 </p>
+              )}
+              {/* FIX: show "Invalid code" message for unknown promo codes */}
+              {promoError && (
+                <p className="text-sm text-red-400" role="alert">{promoError}</p>
               )}
 
               <button
@@ -162,9 +243,10 @@ export default function CheckoutPage() {
                 {cart.map((item) => (
                   <li key={item.id} className="flex gap-3">
                     <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-zinc-800">
+                      {/* FIX: added descriptive alt text */}
                       <Image
                         src={item.image}
-                        alt=""
+                        alt={item.name}
                         fill
                         className="object-cover"
                         sizes="64px"
