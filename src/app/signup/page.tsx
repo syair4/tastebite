@@ -66,6 +66,7 @@ export default function SignupPage() {
             <span className="sr-only">Password</span>
             <input
               type="password"
+              id="password"
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -79,6 +80,7 @@ export default function SignupPage() {
             <span className="sr-only">Confirm password</span>
             <input
               type="password"
+              id="confirm-password"
               placeholder="Confirm password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
