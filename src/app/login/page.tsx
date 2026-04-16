@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
 export default function LoginPage() {
   const { login } = useAuth();
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -14,7 +16,9 @@ export default function LoginPage() {
     e.preventDefault();
     setError("");
     const success = login(email, password);
-    if (!success) {
+    if (success) {
+      router.push("/");
+    } else {
       setError("Invalid email or password. Please try again.");
     }
   }
@@ -28,7 +32,6 @@ export default function LoginPage() {
         <p className="mb-8 text-center text-sm text-zinc-400">Log in to your account</p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* FIX: changed type="text" to type="email" for proper email input */}
           <label className="block">
             <span className="sr-only">Email address</span>
             <input
@@ -41,7 +44,6 @@ export default function LoginPage() {
               className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-white placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
             />
           </label>
-          {/* FIX: changed type="text" to type="password" so password is masked */}
           <label className="block">
             <span className="sr-only">Password</span>
             <input

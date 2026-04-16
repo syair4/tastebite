@@ -2,10 +2,12 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
 export default function SignupPage() {
   const { signup } = useAuth();
+  const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -15,7 +17,6 @@ export default function SignupPage() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
-    // FIX: validate passwords match before calling signup
     if (password !== confirmPassword) {
       setError("Passwords do not match. Please try again.");
       return;
@@ -24,7 +25,10 @@ export default function SignupPage() {
       setError("Password must be at least 6 characters.");
       return;
     }
-    signup(name, email, password);
+    const success = signup(name, email, password);
+    if (success) {
+      router.push("/");
+    }
   }
 
   return (
@@ -48,7 +52,6 @@ export default function SignupPage() {
               className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-white placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
             />
           </label>
-          {/* FIX: changed type="text" to type="email" */}
           <label className="block">
             <span className="sr-only">Email address</span>
             <input
@@ -61,7 +64,6 @@ export default function SignupPage() {
               className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-white placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
             />
           </label>
-          {/* FIX: changed type="text" to type="password" */}
           <label className="block">
             <span className="sr-only">Password</span>
             <input
@@ -75,7 +77,6 @@ export default function SignupPage() {
               className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-white placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
             />
           </label>
-          {/* FIX: changed type="text" to type="password" */}
           <label className="block">
             <span className="sr-only">Confirm password</span>
             <input
