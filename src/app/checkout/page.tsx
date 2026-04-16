@@ -212,7 +212,7 @@ export default function CheckoutPage() {
               </div>
               {promoApplied && (
                 <p className="text-sm text-green-400">
-                  Invalid promo code. Please try a different code.
+                  Promo code applied successfully!
                 </p>
               )}
               {/* FIX: show "Invalid code" message for unknown promo codes */}
