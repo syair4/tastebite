@@ -4,10 +4,22 @@ import { FormEvent, useState } from "react";
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   // FIX: added form onSubmit handler — button changed from type="button" to type="submit"
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setSubmitError("");
+    const form = new FormData(e.currentTarget);
+    const response = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(Object.fromEntries(form.entries())),
+    });
+    if (!response.ok) {
+      setSubmitError("We could not send your message. Please try again.");
+      return;
+    }
     setSubmitted(true);
   }
 
@@ -38,6 +50,7 @@ export default function ContactPage() {
                 <input
                   type="text"
                   placeholder="Name"
+                  name="name"
                   required
                   aria-label="Your name"
                   className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-white placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
@@ -45,6 +58,7 @@ export default function ContactPage() {
                 <input
                   type="email"
                   placeholder="Email"
+                  name="email"
                   required
                   aria-label="Your email"
                   className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-white placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
@@ -52,6 +66,7 @@ export default function ContactPage() {
                 <input
                   type="text"
                   placeholder="Subject"
+                  name="subject"
                   required
                   aria-label="Message subject"
                   className="w-full rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-white placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
@@ -59,6 +74,7 @@ export default function ContactPage() {
                 <textarea
                   rows={5}
                   placeholder="Message"
+                  name="message"
                   required
                   aria-label="Your message"
                   className="w-full resize-y rounded-lg border border-zinc-700 bg-zinc-950 px-4 py-3 text-white placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
@@ -70,6 +86,9 @@ export default function ContactPage() {
                 >
                   Submit
                 </button>
+                {submitError && (
+                  <p className="text-sm text-red-400" role="alert">{submitError}</p>
+                )}
               </form>
             )}
           </div>
