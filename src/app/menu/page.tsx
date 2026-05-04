@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Image from "next/image";
 import { categories, menuItems } from "@/data/menu";
 import { useCart } from "@/context/CartContext";
 
@@ -71,12 +72,12 @@ export default function MenuPage() {
               className="flex flex-col overflow-hidden rounded-xl border border-amber-500/20 bg-[#1a1a2e] shadow-lg shadow-black/40"
             >
               <div className="relative aspect-[4/3] w-full overflow-hidden bg-black/30">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                {/* FIX: added descriptive alt text */}
-                <img
+                <Image
                   src={item.image}
                   alt={item.name}
-                  className="h-full w-full object-cover"
+                  fill
+                  sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                  className="object-cover"
                 />
               </div>
               <div className="flex flex-1 flex-col p-5">
