@@ -14,13 +14,11 @@ export default function CheckoutPage() {
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
   const [zip, setZip] = useState("");
-  const [cardNumber, setCardNumber] = useState("");
-  const [expiry, setExpiry] = useState("");
-  const [cvv, setCvv] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("pay-at-restaurant");
+  const [orderStatus, setOrderStatus] = useState("");
   const [promoCode, setPromoCode] = useState("");
   const [promoApplied, setPromoApplied] = useState(false);
   const [promoError, setPromoError] = useState("");
-  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
   const discountAmount = 0;
 
@@ -39,46 +37,40 @@ export default function CheckoutPage() {
     }
   }
 
-  function validateFields(): boolean {
-    const errors: Record<string, string> = {};
-
-    // FIX: card number validation — digits only, 13–19 chars
-    const cardDigits = cardNumber.replace(/\s/g, "");
-    if (!/^\d{13,19}$/.test(cardDigits)) {
-      errors.cardNumber = "Card number must be 13–19 digits.";
-    }
-
-    // FIX: CVV validation — 3 or 4 digits
-    if (!/^\d{3,4}$/.test(cvv)) {
-      errors.cvv = "CVV must be 3 or 4 digits.";
-    }
-
-    // FIX: expiry validation — MM/YY format
-    if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry)) {
-      errors.expiry = "Expiry must be in MM/YY format.";
-    }
-
-    setValidationErrors(errors);
-    return Object.keys(errors).length === 0;
-  }
-
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!validateFields()) return;
-    window.alert("Order placed! Thank you for choosing TasteBite.");
+    setOrderStatus("");
+    const response = await fetch("/api/orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        fullName,
+        email,
+        address,
+        city,
+        zip,
+        paymentMethod,
+        promoCode: promoApplied ? promoCode.trim().toUpperCase() : "",
+        items: cart,
+        total: cartTotal - discountAmount,
+      }),
+    });
+    if (!response.ok) {
+      setOrderStatus("We could not place your order. Please try again.");
+      return;
+    }
+    const result = await response.json();
+    setOrderStatus(`Order placed! Confirmation ${result.confirmationId}.`);
     clearCart();
     setFullName("");
     setEmail("");
     setAddress("");
     setCity("");
     setZip("");
-    setCardNumber("");
-    setExpiry("");
-    setCvv("");
+    setPaymentMethod("pay-at-restaurant");
     setPromoCode("");
     setPromoApplied(false);
     setPromoError("");
-    setValidationErrors({});
   }
 
   return (
@@ -140,58 +132,21 @@ export default function CheckoutPage() {
                   className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-3 text-zinc-100 placeholder:text-zinc-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
                 />
               </div>
-              <div>
-                <input
-                  type="text"
-                  placeholder="Card Number"
-                  value={cardNumber}
-                  onChange={(e) => setCardNumber(e.target.value)}
-                  aria-label="Card Number"
-                  inputMode="numeric"
-                  maxLength={19}
-                  className={`w-full rounded-lg border px-4 py-3 text-zinc-100 placeholder:text-zinc-500 bg-zinc-900 focus:outline-none focus:ring-1 focus:ring-amber-500 ${
-                    validationErrors.cardNumber ? "border-red-500" : "border-zinc-700 focus:border-amber-500"
-                  }`}
-                />
-                {validationErrors.cardNumber && (
-                  <p className="mt-1 text-sm text-red-400">{validationErrors.cardNumber}</p>
-                )}
-              </div>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div>
-                  <input
-                    type="text"
-                    placeholder="Expiry (MM/YY)"
-                    value={expiry}
-                    onChange={(e) => setExpiry(e.target.value)}
-                    aria-label="Card expiry date (MM/YY)"
-                    maxLength={5}
-                    className={`w-full rounded-lg border px-4 py-3 text-zinc-100 placeholder:text-zinc-500 bg-zinc-900 focus:outline-none focus:ring-1 focus:ring-amber-500 ${
-                      validationErrors.expiry ? "border-red-500" : "border-zinc-700 focus:border-amber-500"
-                    }`}
-                  />
-                  {validationErrors.expiry && (
-                    <p className="mt-1 text-sm text-red-400">{validationErrors.expiry}</p>
-                  )}
-                </div>
-                <div>
-                  <input
-                    type="text"
-                    placeholder="CVV"
-                    value={cvv}
-                    onChange={(e) => setCvv(e.target.value)}
-                    aria-label="CVV security code"
-                    inputMode="numeric"
-                    maxLength={4}
-                    className={`w-full rounded-lg border px-4 py-3 text-zinc-100 placeholder:text-zinc-500 bg-zinc-900 focus:outline-none focus:ring-1 focus:ring-amber-500 ${
-                      validationErrors.cvv ? "border-red-500" : "border-zinc-700 focus:border-amber-500"
-                    }`}
-                  />
-                  {validationErrors.cvv && (
-                    <p className="mt-1 text-sm text-red-400">{validationErrors.cvv}</p>
-                  )}
-                </div>
-              </div>
+              <label className="block">
+                <span className="mb-2 block text-sm text-zinc-400">Payment method</span>
+                <select
+                  value={paymentMethod}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                  aria-label="Payment method"
+                  className="w-full rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-3 text-zinc-100 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
+                >
+                  <option value="pay-at-restaurant">Pay at restaurant</option>
+                  <option value="pay-on-delivery">Pay on delivery</option>
+                </select>
+              </label>
+              <p className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-200">
+                TasteBite does not collect card numbers or security codes in this demo checkout. Online payments should be handled by a PCI-compliant provider tokenization flow.
+              </p>
 
               <div className="flex flex-wrap gap-2 pt-2">
                 <input
@@ -226,6 +181,9 @@ export default function CheckoutPage() {
               >
                 Place Order
               </button>
+              {orderStatus && (
+                <p className="text-sm text-green-400" role="status">{orderStatus}</p>
+              )}
             </form>
           </section>
 

@@ -45,6 +45,7 @@ export default function SignupPage() {
             <input
               type="text"
               placeholder="Name"
+              autoComplete="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               aria-label="Full name"
@@ -57,6 +58,7 @@ export default function SignupPage() {
             <input
               type="email"
               placeholder="Email"
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               aria-label="Email address"
@@ -70,6 +72,7 @@ export default function SignupPage() {
               type="password"
               id="password"
               placeholder="Password"
+              autoComplete="new-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               aria-label="Password"
@@ -83,6 +86,7 @@ export default function SignupPage() {
               type="password"
               id="confirm-password"
               placeholder="Confirm password"
+              autoComplete="new-password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               aria-label="Confirm password"
