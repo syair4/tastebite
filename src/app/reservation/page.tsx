@@ -31,6 +31,7 @@ export default function ReservationPage() {
   const [requests, setRequests] = useState("");
   // FIX: added confirmation state to show success message after submission
   const [confirmed, setConfirmed] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [confirmedDetails, setConfirmedDetails] = useState<{
     name: string;
     date: string;
@@ -38,8 +39,18 @@ export default function ReservationPage() {
     partySize: string;
   } | null>(null);
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setSubmitError("");
+    const response = await fetch("/api/reservations", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, phone, date, time, partySize, requests }),
+    });
+    if (!response.ok) {
+      setSubmitError("We could not save your reservation. Please try again.");
+      return;
+    }
     // Save details before resetting
     setConfirmedDetails({ name, date, time, partySize });
     setConfirmed(true);
@@ -188,6 +199,9 @@ export default function ReservationPage() {
           >
             Reserve Table
           </button>
+          {submitError && (
+            <p className="text-sm text-red-400" role="alert">{submitError}</p>
+          )}
         </form>
       </div>
     </div>
