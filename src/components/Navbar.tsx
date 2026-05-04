@@ -44,6 +44,7 @@ export function Navbar() {
         <div className="flex items-center gap-3">
           <Link
             href="/cart"
+            aria-label={cartCount > 0 ? `Cart with ${cartCount} item${cartCount === 1 ? "" : "s"}` : "Cart"}
             className="relative inline-flex items-center justify-center rounded-md p-2 text-amber-400 transition-colors hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-amber-400 focus-visible:ring-offset-1 focus-visible:ring-offset-[#1a1a2e] focus-visible:outline-none"
           >
             <svg
@@ -66,6 +67,9 @@ export function Navbar() {
                 {cartCount}
               </span>
             )}
+            <span className="sr-only">
+              {cartCount > 0 ? `Cart with ${cartCount} item${cartCount === 1 ? "" : "s"}` : "Cart"}
+            </span>
           </Link>
 
           {isLoggedIn && user ? (
